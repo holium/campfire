@@ -32,7 +32,7 @@ export function Urchat() {
   const [dataChannel, setDataChannel] = useState<RTCDataChannel>(null);
   const [dataChannelOpen, setDataChannelOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
-  const isSecure = location.protocol.startsWith('https');//|| location.hostname === 'localhost';
+  const isSecure = location.protocol.startsWith('https') || location.hostname === 'localhost';
 
   // Set up callback to update device lists when a new device is added or removed
 
