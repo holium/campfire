@@ -6,6 +6,11 @@ type Track = MediaStreamTrack & {
   sender: RTCRtpSender;
 }
 
+interface ScreenMedia {
+  enabled: boolean;
+  tracks: Track[];
+}
+
 interface Media {
   enabled: boolean;
   device: MediaDeviceInfo | null;
@@ -19,6 +24,7 @@ interface MediaStore {
   remote: MediaStream;
   video: Media;
   audio: Media;
+  sharedScreen: ScreenMedia;
   devices: MediaDeviceInfo[];
   getDevices: (call: OngoingCall) => Promise<void>;
   resetStreams: () => void;
@@ -33,7 +39,6 @@ export const useMediaStore = create<MediaStore>((set, get) => ({
     tracks: [],
     changeDevice: (device: MediaDeviceInfo, call: OngoingCall) => changeDevice(device, 'video', get(), call),
     toggle: () => {
-      ;
       set({ video: toggleMedia(get().video) })
     }
   },
@@ -43,8 +48,24 @@ export const useMediaStore = create<MediaStore>((set, get) => ({
     tracks: [],
     changeDevice: (device: MediaDeviceInfo, call: OngoingCall) => changeDevice(device, 'audio', get(), call),
     toggle: () => {
-      ;
       set({ audio: toggleMedia(get().audio) })
+    }
+  },
+  sharedScreen: {
+    enabled: false,
+    tracks: [],
+    toggle: () => {
+      var screenShareState = get().sharedScreen;
+      if(screenShareState.enabled){
+        // set({sharedScreen: await stopShareScreen(get(), call)})
+        console.log("stop sharing");
+        screenShareState.enabled = false;
+      } else{
+        // set({sharedScreen: await startShareScreen(get(), call)})
+        console.log("start sharing");
+        screenShareState.enabled = true;
+      }
+      set({sharedScreen: screenShareState});
     }
   },
   devices: [],
@@ -69,7 +90,6 @@ export const useMediaStore = create<MediaStore>((set, get) => ({
 }))
 
 function toggleMedia(media: Media): Media {
-  ;
   media.enabled = !media.enabled;
 
   media.tracks.forEach(track => {
@@ -86,6 +106,43 @@ const prefs = {
     height: 719
   },
   audio: null
+}
+
+async function startShareScreen(state: MediaStore, call: OngoingCall): Promise<ScreenMedia>{
+  const media = state.sharedScreen;
+
+  const addTrack = (track: MediaStreamTrack) => {
+    console.log('Adding screenshare track to call', track);
+    state.local.addTrack(track);
+    const sender = call.conn?.addTrack(track);
+    (track as Track).sender = sender
+    return track as Track;
+  }
+
+  media.tracks = (await navigator.mediaDevices.getDisplayMedia()).getTracks().map(addTrack);
+  media.enabled = true;
+    
+  return media
+}
+
+async function stopShareScreen(state: MediaStore, call: OngoingCall): Promise<ScreenMedia>{
+  const media = state.sharedScreen;
+
+  const removeTrack = (track: Track) => {
+    console.log('Removing screenshare track from call', track);
+    state.local.removeTrack(track);
+    try {
+      call.conn?.removeTrack(track.sender);
+    } catch (err) {
+      console.log(err);
+    }
+    track.stop();
+  }
+
+  media.tracks.forEach(removeTrack);
+  media.enabled = false;
+    
+  return media
 }
 
 async function changeDevice(device: MediaDeviceInfo, type: 'audio' | 'video', state: MediaStore, call: OngoingCall): Promise<Media> {
@@ -112,11 +169,13 @@ async function changeDevice(device: MediaDeviceInfo, type: 'audio' | 'video', st
   const constraints = { [type]: { deviceId: device.deviceId, ...prefs[type] } };
   const stream = await navigator.mediaDevices?.getUserMedia(constraints);
   
-  ;
   media.tracks.forEach(removeTrack);
-  media.tracks = type === 'audio' 
-    ? stream.getAudioTracks().map(addTrack)
-    : stream.getVideoTracks().map(addTrack); 
+    
+  if(type==="audio"){
+    media.tracks = stream.getAudioTracks().map(addTrack);
+  } else if(type === "video"){
+    media.tracks = stream.getVideoTracks().map(addTrack);
+  }
 
   media.device = device;
 
