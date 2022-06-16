@@ -9,6 +9,7 @@ type Track = MediaStreamTrack & {
 interface ScreenMedia {
   enabled: boolean;
   tracks: Track[];
+  toggle: () => void;
 }
 
 interface Media {
@@ -26,6 +27,7 @@ interface MediaStore {
   audio: Media;
   sharedScreen: ScreenMedia;
   devices: MediaDeviceInfo[];
+  call: OngoingCall;
   getDevices: (call: OngoingCall) => Promise<void>;
   resetStreams: () => void;
 }
@@ -54,17 +56,15 @@ export const useMediaStore = create<MediaStore>((set, get) => ({
   sharedScreen: {
     enabled: false,
     tracks: [],
-    toggle: () => {
+    toggle: async () => {
       var screenShareState = get().sharedScreen;
       if(screenShareState.enabled){
-        // set({sharedScreen: await stopShareScreen(get(), call)})
-        console.log("stop sharing");
-        screenShareState.enabled = false;
+        set({sharedScreen: await stopShareScreen(get())})
       } else{
-        // set({sharedScreen: await startShareScreen(get(), call)})
-        console.log("start sharing");
-        screenShareState.enabled = true;
+        set({sharedScreen: await startShareScreen(get())})
       }
+      screenShareState.enabled = !screenShareState.enabled;
+
       set({sharedScreen: screenShareState});
     }
   },
@@ -75,6 +75,7 @@ export const useMediaStore = create<MediaStore>((set, get) => ({
       remote: new MediaStream()
     })
   },
+  call: null,
   getDevices: async (call: OngoingCall) => {
     const devices = await navigator.mediaDevices?.enumerateDevices();
     const videoDevs = devices.filter(dev => dev.kind === 'videoinput');
@@ -85,7 +86,8 @@ export const useMediaStore = create<MediaStore>((set, get) => ({
     // via getUserMedia in effects below
     const video = await changeDevice(videoDevs[0], 'video', get(), call);
     const audio = useMock ? get().audio :  await changeDevice(audioDevs[0], 'audio', get(), call);
-    set({ devices, video, audio })
+    set({ devices, video, audio });
+    set({call: call});
   }
 }))
 
@@ -108,11 +110,13 @@ const prefs = {
   audio: null
 }
 
-async function startShareScreen(state: MediaStore, call: OngoingCall): Promise<ScreenMedia>{
+async function startShareScreen(state: MediaStore): Promise<ScreenMedia>{
   const media = state.sharedScreen;
+  const call = state.call;
 
   const addTrack = (track: MediaStreamTrack) => {
     console.log('Adding screenshare track to call', track);
+    track.contentHint = "screenshare";
     state.local.addTrack(track);
     const sender = call.conn?.addTrack(track);
     (track as Track).sender = sender
@@ -125,8 +129,9 @@ async function startShareScreen(state: MediaStore, call: OngoingCall): Promise<S
   return media
 }
 
-async function stopShareScreen(state: MediaStore, call: OngoingCall): Promise<ScreenMedia>{
+async function stopShareScreen(state: MediaStore): Promise<ScreenMedia>{
   const media = state.sharedScreen;
+  const call = state.call;
 
   const removeTrack = (track: Track) => {
     console.log('Removing screenshare track from call', track);

@@ -13,6 +13,19 @@ interface CallProps {
 export const Call = ({ connected }: CallProps) => {
   const { local, remote, video } = useMediaStore(s => ({ local: s.local, remote: s.remote, video: s.video }));
   const landscape = (video.tracks[0]?.getSettings()?.aspectRatio > 1) || true;
+  const hasScreenshare = remote.getVideoTracks().some(x => x.contentHint === "screenshare");
+  console.log("has screenshare value: "+hasScreenshare);
+  // const cameratrack = remote.getVideoTracks().filter(x => x.contentHint != "screenshare")[0];
+  // const audiotrack = remote.getAudioTracks()[0];
+  // const remoteCamera = new MediaStream([cameratrack,audiotrack]);
+
+
+  var remoteScreenShare = null;
+  if(hasScreenshare){
+    console.log("has screenshare, making MediaStream");
+    const screensharetrack = remote.getVideoTracks().filter(x => x.contentHint == "screenshare")[0];
+    remoteScreenShare = new MediaStream([screensharetrack]);
+  }
 
   return (
     <>
@@ -20,7 +33,8 @@ export const Call = ({ connected }: CallProps) => {
         <div className="absolute z-10 top-2 left-2 sm:top-6 sm:left-6">
           <Video 
             size={landscape ? 'mini' : 'xs-mini'} 
-            muted
+            muted={true}
+            isScreenshare={false}
             srcObject={local} 
             className={classNames(
               'border border-white',
@@ -29,7 +43,10 @@ export const Call = ({ connected }: CallProps) => {
             )}
           />
         </div>
-        <Video size="large" className="absolute inset-0 h-full w-full" srcObject={useMock ? local : remote} muted={useMock} />
+        <Video size="large" className="absolute inset-0 h-full w-full" isScreenshare={false} srcObject={remote} muted={false} />
+        {hasScreenshare &&  
+          <Video size="large" className="absolute inset-0 h-full w-full" isScreenshare={true} srcObject={remoteScreenShare} muted={false} />
+        }
         {!connected && 
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <div className="flex items-center mb-2">
