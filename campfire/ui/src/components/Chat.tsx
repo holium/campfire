@@ -44,6 +44,7 @@ export const Chat = observer(({ sendMessage, messages, ready }: ChatProps) => {
         flexDirection: "column",
         opacity: disabled ? 0.5 : 1,
       }}
+      className="simpleCard"
     >
       <Flex flexDirection="column" flexGrow={1}>
         <Flex mx={1} flexDirection="column-reverse" justifyContent="flex-start">

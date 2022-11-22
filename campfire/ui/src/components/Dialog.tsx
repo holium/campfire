@@ -25,7 +25,7 @@ export const DialogContent = React.forwardRef<
     {...props}
     ref={ref}
   >
-    <div className={`relative ${className}`}>
+    <div className={`relative ${className} dialog`}>
       {children}
       {showCloseIcon && (
         <RadixDialog.Close

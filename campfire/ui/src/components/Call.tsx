@@ -35,8 +35,8 @@ export const Call = observer(() => {
 
   return (
     <>
-      <div className="callWrapper">
-        <div className="myMedia">
+      <div className="relative w-full h-full overflow-hidden lg:rounded-xl">
+        <div className="absolute z-10 top-2 left-2 sm:top-6 sm:left-6">
           <Video
             size={landscape ? "mini" : "xs-mini"}
             muted={true}
@@ -62,7 +62,7 @@ export const Call = observer(() => {
             />
           )}
         </div>
-        <div  className="remoteMedia">
+        <div id="remotevideos" className="h-full w-full flex flex-col">
           <Video
             size="large"
             className="flex-1"

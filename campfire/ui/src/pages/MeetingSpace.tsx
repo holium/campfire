@@ -59,22 +59,24 @@ export const MeetingSpace: FC<any> = observer(() => {
   // ---------------------------------------------------------------
   return (
     <Flex
-      style={{ background: "#FBFBFB" }}
+      // style={{ background: "#FBFBFB" }}
       flex={1}
       height="100vh"
       width="100%"
       justifyContent="center"
       alignItems="center"
       flexDirection="row"
+      className="outerWrapper"
     >
       <Flex
-        style={{ background: "#EBEBEB", position: "relative" }}
+        style={{ position: "relative" }}
         borderRadius={20}
         width="75%"
         height="90%"
         m={10}
         justifyContent="center"
         alignItems="center"
+        className="innerWrapper"
       >
         {!urchatStore.dataChannelOpen && urchatStore.ongoingCall && (
           <Flex
@@ -189,6 +191,7 @@ export const MeetingSpace: FC<any> = observer(() => {
           mt={1}
           mb={3}
           style={{ padding: 8, gap: 4 }}
+          className="simpleCard"
         >
           <Flex gap={4} flexDirection="column">
             {/* TODO load contact store into local storage and lookup sigil metadata */}
