@@ -130,13 +130,7 @@ export const StartMeetingPage: FC<any> = observer(() => {
   // ---------------------------------------------------------------
   return (
     <Flex
-      style={{ background: "#FBFBFB" }}
-      flex={1}
-      height="100vh"
-      width="100%"
-      justifyContent="center"
-      alignItems="center"
-      flexDirection="column"
+      className="startMeetingWrapper"
     >
       <Flex
         minWidth={650}
