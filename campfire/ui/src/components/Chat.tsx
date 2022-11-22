@@ -43,8 +43,8 @@ export const Chat = observer(({ sendMessage, messages, ready }: ChatProps) => {
         display: "flex",
         flexDirection: "column",
         opacity: disabled ? 0.5 : 1,
+        backgroundColor: "var(--rlm-card-color, #FBFBFB)"
       }}
-      className="simpleCard"
     >
       <Flex flexDirection="column" flexGrow={1}>
         <Flex mx={1} flexDirection="column-reverse" justifyContent="flex-start">

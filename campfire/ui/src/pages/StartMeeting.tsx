@@ -137,7 +137,7 @@ export const StartMeetingPage: FC<any> = observer(() => {
       justifyContent="center"
       alignItems="center"
       flexDirection="column"
-      className="outerWrapper"
+      className="windowColor"
     >
       <Flex
         minWidth={650}
