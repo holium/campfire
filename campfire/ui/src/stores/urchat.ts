@@ -42,13 +42,14 @@ interface IUrchatStore {
   placeCall: (
     ship: string,
     setHandlers: (call: OngoingCall) => void
-  ) => Promise<any>;
+  ) => Promise<void>;
   answerCall: (
     setHandlers: (ship: string, conn: UrbitRTCPeerConnection) => void
-  ) => Promise<any>;
+  ) => Promise<OngoingCall>;
   rejectCall: () => void;
   hangup: () => void;
   hungup: () => void;
+  makeFalseWasHungUp: () => void;
   setMessages: (new_mesages: Message[]) => void;
 }
 
@@ -71,7 +72,7 @@ export class UrchatStore implements IUrchatStore {
     console.log("make constructor");
     this.urbit = new Urbit("", "");
     // requires <script> tag for /~landscape/js/session.js
-    this.urbit.ship = (window as any).ship;
+    this.urbit.ship = (window as Window & typeof globalThis & {ship: string} ).ship;
     this.urbit.verbose = true;
     this.urbitRtcApp = new UrbitRTCApp(dap, this.configuration);
     this.urbitRtcApp.addEventListener(
@@ -114,6 +115,7 @@ export class UrchatStore implements IUrchatStore {
       rejectCall: action.bound,
       hangup: action.bound,
       hungup: action.bound,
+      makeFalseWasHungUp: action.bound,
       setMessages: action.bound,
     });
   }
@@ -172,12 +174,12 @@ export class UrchatStore implements IUrchatStore {
     const { urbitRtcApp, hungup, startIcepond } = this;
     const conn = urbitRtcApp.call(ship, dap);
     conn.addEventListener("hungupcall", hungup);
-    conn.onurbitstatechanged = (ev: Event) => {
+    conn.onurbitstatechanged = (_ev: Event) => {
       runInAction(() => {
         this.connectionState = conn.urbitState;
       });
     };
-    conn.onring = (uuid: string) => {
+    conn.onring = (_uuid: string) => {
       runInAction(() => {
         const call = { peer: ship, dap: dap, uuid: conn.uuid };
         const ongoingCall = { conn, call };
@@ -201,7 +203,7 @@ export class UrchatStore implements IUrchatStore {
     const call = incomingCall.call;
     const conn = incomingCall.answer();
     conn.addEventListener("hungupcall", hungup);
-    conn.onurbitstatechanged = (ev: Event) => {
+    conn.onurbitstatechanged = (_ev: Event) => {
       runInAction(() => {
         this.connectionState = conn.urbitState;
       });
@@ -252,6 +254,10 @@ export class UrchatStore implements IUrchatStore {
     this.ongoingCall = null;
     this.dataChannelOpen = false;
     this.wasHungUp = true;
+  }
+
+  makeFalseWasHungUp() {
+    this.wasHungUp = false;
   }
 
   setMessages(new_messages: Message[]) {

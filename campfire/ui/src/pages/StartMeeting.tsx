@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useState } from "react";
+import React, { FC, useEffect, useMemo, useRef } from "react";
 import { observer } from "mobx-react";
 import { useHistory } from "react-router";
 import { deSig } from "@urbit/api";
@@ -16,15 +16,19 @@ import { resetRing, ringing } from "../stores/media";
 import { IceServers } from "../components/IceServers";
 
 export const StartMeetingPage: FC<any> = observer(() => {
-  console.log("Rerender StartMeetingPage");
   document.title = "Campfire";
   const { form, meetingCode } = useMemo(meetingCodeForm, []);
   const { mediaStore, urchatStore, palsStore } = useStore();
   const { push } = useHistory();
-  // const audio = new Audio(ring);
+  const icepondLoaded = useRef<boolean>(false);
 
-  //fetch icepond config initally so we can display them in "Settings"
-  urchatStore.startIcepond();
+  //fetch icepond config on inital load so we can display them in "Settings"
+  useEffect(() => {
+    if (!icepondLoaded.current) {
+      urchatStore.startIcepond();
+      icepondLoaded.current = true;
+    }
+  })
 
   const isSecure =
     location.protocol.startsWith("https") || location.hostname === "localhost";
@@ -59,7 +63,7 @@ export const StartMeetingPage: FC<any> = observer(() => {
     ringing.loop = true;
     ringing.play();
     mediaStore.resetStreams();
-    const call = await urchatStore.placeCall(ship, (call) => {
+    await urchatStore.placeCall(ship, (call) => {
       push(`/chat/${call.conn.uuid}`);
       mediaStore.getDevices(call);
       urchatStore.setDataChannelOpen(false);
@@ -191,7 +195,7 @@ export const StartMeetingPage: FC<any> = observer(() => {
               }
               onFocus={() => meetingCode.actions.onFocus()}
               onBlur={() => meetingCode.actions.onBlur()}
-              onChange={(evt: any) => {
+              onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
                 meetingCode.actions.onChange(evt.target.value);
               }}
             />
@@ -272,7 +276,7 @@ export const StartMeetingPage: FC<any> = observer(() => {
 });
 
 export const meetingCodeForm = (
-  defaults: any = {
+  defaults = {
     meetingCode: "",
   }
 ) => {

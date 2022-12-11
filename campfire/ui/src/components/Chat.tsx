@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import {
   Flex,
   Card,
@@ -24,6 +24,7 @@ export const Chat = observer(({ sendMessage, messages, ready }: ChatProps) => {
   const { form, message } = useMemo(chatInputForm, []);
   const chatInputRef = useRef(null);
   const disabled = !ready;
+
   const onSubmitMessage = () => {
     const formData = form.actions.submit();
 
@@ -93,14 +94,14 @@ export const Chat = observer(({ sendMessage, messages, ready }: ChatProps) => {
               <Icons.ArrowRight opacity={0.8} />
             </IconButton>
           }
-          onKeyDown={(event: any) => {
-            if (event.keyCode === 13 && !event.shiftKey) {
+          onKeyDown={(event: KeyboardEvent) => {
+            if (event.key === "Enter" && !event.shiftKey) {
               onSubmitMessage();
             }
           }}
           onFocus={() => message.actions.onFocus()}
           onBlur={() => message.actions.onBlur()}
-          onChange={(evt: any) => {
+          onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
             message.actions.onChange(evt.target.value);
           }}
         />
@@ -110,8 +111,8 @@ export const Chat = observer(({ sendMessage, messages, ready }: ChatProps) => {
 });
 
 export const chatInputForm = (
-  defaults: any = {
-    chat: "",
+  defaults = {
+    message: "",
   }
 ) => {
   const form = createForm({
