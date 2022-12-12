@@ -172,16 +172,6 @@ export const MeetingSpace: FC<any> = observer(() => {
         )}
         {urchatStore.dataChannelOpen && <Call />}
       </Flex>
-      {/* <Flex width="25%" flexDirection="column" gap={6} m={10} height="90%">
-        <Flex width="100%" height="50px" className="windowColor"><p>test windowColor</p></Flex>
-        <Flex width="100%" height="50px" className="baseColor"><p>test baseColor</p></Flex>
-        <Flex width="100%" height="50px" className="cardColor"><p>test cardColor</p></Flex>
-        <Flex width="100%" height="50px" className="iconColor"><p>test iconColor</p></Flex>
-        <Flex width="100%" height="50px" className="inputColor"><p>test inputColor</p></Flex>
-        <Flex width="100%" height="50px" className="borderColor"><p>test borderColor</p></Flex>
-        <Flex width="100%" height="50px" className="accentColor"><p>test accentColor</p></Flex>
-        <Flex width="100%" height="50px" className="input"><p>test input</p></Flex>
-      </Flex> */}
       <Flex width="25%" flexDirection="column" gap={6} m={10} height="90%">
         <SectionHeader
           header="Participants"
