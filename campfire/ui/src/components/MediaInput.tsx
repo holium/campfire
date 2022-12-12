@@ -70,7 +70,7 @@ export function MediaInput() {
         </select>
       </div>
       <div className="AudioOutputs w-full">
-        <Text variant="label" pb={1}>
+        <Text variant="label" pb={1} style={{color: "var(--rlm-text-color, #FF0000)"}}>
           Audio Output
         </Text>
         <select
