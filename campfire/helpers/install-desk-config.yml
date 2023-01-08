@@ -1,0 +1,21 @@
+env:
+  desk: 'campfire'
+  urbit_path: '~/dev/urbit/urbit'
+  repo_path: '~/dev/urbit/holium/campfire'
+  ship_path: '~/dev/urbit/ships'
+script:
+  - merge:
+    - cmd: 'merge %campfire our %base'
+      type: 'urbit:app'
+  - mount:
+    - cmd: 'mount %campfire'
+      type: 'urbit:app'
+  - buildandcopydesk:
+    - cmd: '~/dev/urbit/holium/campfire/campfire/helpers/build-and-copy-desk.sh'
+      type: 'system'
+  - commit:
+    - cmd: 'commit %campfire'
+      type: 'urbit:app'
+  - install:
+    - cmd: 'install our %campfire'
+      type: 'urbit:app'

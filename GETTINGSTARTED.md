@@ -14,20 +14,7 @@
 8. Enable CORS for localhost (see below) 
 
 
-## Install icepond & switchboard
-`|merge %icepond our %base`
-`|mount %icepond`
-`|merge %switchboard our %base`
-`|mount %switchboard`
-copy the urbit-webrtc/icepond into zod/icepond
-`|commit %icepond`
-`|commit %switchboard`
-run
-`|install our %icepond`
-`|rein %icepond [& %icepond]`
-`|install our %switchboard`
-`|rein %switchboard [& %switchboard]`
-
+## Install icepond & rtcswitchboard
 
 ## enable Cors
 Currently need to approve some origin so that the `@urbit/http-api` works.

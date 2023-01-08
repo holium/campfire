@@ -8,9 +8,10 @@ if [[ $user_input != "n" && $user_input != "no" ]] ; then
 	read -p "Now you need to create a new fake zod at the location. Run 'urbit -F zod -c ~/dev/urbit/ships/zod/' in another terminal session. Press any key once the ship is fully booted......"
 fi
 
+
 # navigate to the urbit bouncer repo
 cd ~/urbit/bouncer
-bin/bounce -c ~/dev/urbit/holium/campfire/campfire/helpers/glob-config.yml
+bin/bounce -c ~/dev/urbit/holium/campfire/campfire/helpers/install-desk-config.yml
 
-# at this point glob should be built and ready to go
-echo "Your glob can be found at '~/dev/urbit/ships/zod/.urb/put/'"
+# desk should be ready
+echo "The %campfire desk has been installed. Remember to upload the UI at http://localhost:8080/docket/upload if you want to use the frontend (grid will show campfire as 'installing' until you do this)"

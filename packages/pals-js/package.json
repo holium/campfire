@@ -1,7 +1,7 @@
 {
   "name": "pals",
   "version": "0.0.1",
-  "description": "JS bindings to Urbit ~paldev's '%pals' app by ~palfun-folsup",
+  "description": "JS bindings to Urbit ~paldev's '%pals' app by ~palfun-folsup. Unofficial implementation by ~datryn-ribdun",
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/datryn-ribdun/urbit-webrtc"
+    "url": "git+https://github.com/holium/campfire"
   },
   "keywords": [
     "pals",
@@ -27,9 +27,9 @@
   "author": "datryn-ribdun",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/datryn-ribdun/urbit-webrtc"
+    "url": "https://github.com/holium/campfire"
   },
-  "homepage": "https://github.com/datryn-ribdun/urbit-webrtc",
+  "homepage": "https://github.com/holium/campfire",
   "eslintConfig": {
     "extends": [
       "@urbit/eslint-config"

@@ -9,7 +9,10 @@ script:
     - cmd: 'mount %base'
       type: 'urbit:app'
   - buildandcopyui:
-    - cmd: '~/dev/urbit/holium/campfire/campfire/build-ui.sh'
+    - cmd: '~/dev/urbit/holium/campfire/campfire/helpers/build-ui.sh'
+      type: 'system'
+  - addwavtobase:
+    - cmd: 'cp ~/dev/urbit/holium/campfire/campfire/helpers/wav.hoon ~/dev/urbit/ships/zod/base/mar/'
       type: 'system'
   - commit:
     - cmd: 'commit %base'
