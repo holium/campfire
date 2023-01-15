@@ -31,7 +31,7 @@ export const SettingsDialog = () => {
         <Text fontSize={6} fontWeight={500}>
           ICE Servers
         </Text>
-        <span>Below are the ICE servers that Campfire is currently configured to use for establshing it's peer-to-peer connections. These servers can be set for your ship, as well as it's sponsor:</span>
+        <span>Below are the ICE servers that Campfire is currently configured to use for establshing it's peer-to-peer connections. These servers can be set for your ship, and some may be fetched from your sponsor.</span>
         <br />
         <br />
         <ul>
