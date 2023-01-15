@@ -31,8 +31,5 @@ export const PalsList = observer(({ mutuals, callPal }: PalsListProps) => {
       </>
     );
   }
-  // else {
-  //     return <span title="Must have ~paldev/pals installed and have mutuals">No %pals to Speed Dial</span>;
-  // }
   return <></>;
 });

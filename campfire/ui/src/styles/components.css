@@ -12,7 +12,7 @@ p {
   color: var(--rlm-text-color, #000000);
 }
 .textColor{
-  color: var(--rlm-text-color, #FF0000);
+  color: var(--rlm-text-color, #000000);
 }
 .windowColor {
   background-color: var(--rlm-window-color, #FBFBFB);
@@ -20,7 +20,7 @@ p {
 .baseColor {
   background-color: var(--rlm-base-color, #EBEBEB);
 }
-.inputColor {
+/* .inputColor {
   background-color: var(--rlm-input-color, #f3f4f6);
 }
 .cardColor {
@@ -30,8 +30,8 @@ p {
   background-color: var(--rlm-icon-color, #0F0F0F);
 }
 .borderColor {
-  background-color: var(--rlm-border-color, #FF0000);
+  background-color: var(--rlm-border-color, #F8E390);
 }
 .accentColor {
-  background-color: var(--rlm-accent-color, #FF0000);
-}
+  background-color: var(--rlm-accent-color, #F8E390);
+} */

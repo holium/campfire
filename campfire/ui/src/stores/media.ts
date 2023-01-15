@@ -18,7 +18,6 @@ interface Media {
 interface ScreenMedia {
   enabled: boolean;
   tracks: Track[];
-  toggle: (call: OngoingCall) => void;
 }
 
 interface IMediaStore {
@@ -41,9 +40,7 @@ export const resetRing = () => {
   ringing = new Audio(ring);
 };
 
-/**
- * A class that is observable
- */
+
 export class MediaStore implements IMediaStore {
   local: MediaStream;
   remote: MediaStream;
@@ -81,15 +78,7 @@ export class MediaStore implements IMediaStore {
     this.outputSoundDevice = null;
     this.sharedScreen = {
       enabled: false,
-      tracks: [],
-      toggle: async (call: OngoingCall) => {
-        const screenShareState = this.sharedScreen;
-        if (screenShareState.enabled) {
-          this.sharedScreen = await stopShareScreen(this, call);
-        } else {
-          this.sharedScreen = await startShareScreen(this, call);
-        }
-      },
+      tracks: []
     };
     this.devices = [];
     makeObservable(this, {
@@ -136,7 +125,7 @@ export class MediaStore implements IMediaStore {
 
   async toggleScreenShare(call: OngoingCall) {
     if (this.sharedScreen.enabled) {
-      console.log("stop share screen");
+      console.log("stop local share screen");
       const removeTrack = (track: Track) => {
         console.log("Removing screenshare track from call", track);
         this.local.removeTrack(track);
@@ -149,23 +138,22 @@ export class MediaStore implements IMediaStore {
       });
     } else {
       const addTrack = (track: MediaStreamTrack) => {
+        //this event is triggered when someone clicks the browser "stop sharing button"
         track.onended = (event: Event) => {
-          //this event is triggered when someone clicks the browser "stop sharing button"
-          console.log(`${event} ON ENDED`);
+          console.log(`Browser ended screen share`);
           this.toggleScreenShare(call);
         };
-        console.log("Adding screenshare track to call", track);
-        track.contentHint = "screenshare";
+        console.log("Adding local screenshare track to call", track);
         this.local.addTrack(track);
         const sender = call.conn?.addTrack(track);
         (track as Track).sender = sender;
         return track as Track;
       };
-      const t = (await navigator.mediaDevices.getDisplayMedia())
+      const tracks = (await navigator.mediaDevices.getDisplayMedia())
         .getTracks()
         .map(addTrack);
       runInAction(() => {
-        this.sharedScreen.tracks = t;
+        this.sharedScreen.tracks = tracks;
         this.sharedScreen.enabled = true;
       });
     }
@@ -183,6 +171,9 @@ export class MediaStore implements IMediaStore {
     this.audio.tracks.forEach((track: Track) => {
       track.stop();
     });
+    this.sharedScreen.tracks.forEach((track: Track) => {
+      track.stop();
+    })
   }
 
   addTrackToRemote(track: MediaStreamTrack) {
@@ -248,60 +239,6 @@ async function changeDevice(
       : stream.getVideoTracks().map(addTrack);
 
   media.device = device;
-
-  return media;
-}
-
-async function startShareScreen(
-  state: MediaStore,
-  call: OngoingCall
-): Promise<ScreenMedia> {
-  console.log("start share screen");
-  const media = state.sharedScreen;
-
-  const addTrack = (track: MediaStreamTrack) => {
-    track.onended = (event: Event) => {
-      //TODO: this event is triggered when someone clicks the browser "stop sharing button"
-      // currently very buggy for stop sharing screen.
-      console.log(`${event} ON ENDED`);
-      // stopShareScreen(state);
-    };
-    console.log("Adding screenshare track to call", track);
-    track.contentHint = "screenshare";
-    state.local.addTrack(track);
-    const sender = call.conn?.addTrack(track);
-    (track as Track).sender = sender;
-    return track as Track;
-  };
-
-  media.tracks = (await navigator.mediaDevices.getDisplayMedia())
-    .getTracks()
-    .map(addTrack);
-  media.enabled = true;
-
-  return media;
-}
-
-async function stopShareScreen(
-  state: MediaStore,
-  call: OngoingCall
-): Promise<ScreenMedia> {
-  console.log("stop share screen");
-  const media = state.sharedScreen;
-
-  const removeTrack = (track: Track) => {
-    console.log("Removing screenshare track from call", track);
-    state.local.removeTrack(track);
-    try {
-      call.conn?.removeTrack(track.sender);
-    } catch (err) {
-      console.log(err);
-    }
-    track.stop();
-  };
-
-  media.tracks.forEach(removeTrack);
-  media.enabled = false;
 
   return media;
 }

@@ -13,7 +13,7 @@ import { IncomingCall } from "../components/IncomingCall";
 import packageJson from "../../package.json";
 import { createField, createForm } from "mobx-easy-form";
 import { resetRing, ringing } from "../stores/media";
-import { IceServers } from "../components/IceServers";
+import { SettingsDialog } from "../components/SettingsDialog";
 
 export const StartMeetingPage: FC<any> = observer(() => {
   document.title = "Campfire";
@@ -53,7 +53,7 @@ export const StartMeetingPage: FC<any> = observer(() => {
   });
 
   const onTrack = (evt: Event & { track: MediaStreamTrack }) => {
-    console.log("Incoming track event", evt);
+    console.log("Incoming track event... adding to remote source", evt);
     mediaStore.addTrackToRemote(evt.track);
   };
 
@@ -134,7 +134,7 @@ export const StartMeetingPage: FC<any> = observer(() => {
   // ---------------------------------------------------------------
   return (
     <Flex
-    //   style={{ background: "#FBFBFB" }}
+      //   style={{ background: "#FBFBFB" }}
       flex={1}
       height="100vh"
       width="100%"
@@ -266,7 +266,7 @@ export const StartMeetingPage: FC<any> = observer(() => {
               </Text>
             </DialogTrigger>
             <DialogContent className="w-200 min-h-60 max-w-xl pt-4 pb-6 px-8">
-              <IceServers />
+              <SettingsDialog />
             </DialogContent>
           </Dialog>
         </Flex>
