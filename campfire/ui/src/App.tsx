@@ -19,7 +19,8 @@ function App() {
             <Route path="/chat/:uuid">
               <MeetingSpace />
             </Route>
-            <Route path="*">
+            {/* Catch all for anything else */}
+            <Route path="*"> 
               <Redirect to="/" />
             </Route>
           </Switch>

@@ -2,7 +2,6 @@ import React, { FC, useEffect } from "react";
 import {
   Flex,
   Ship,
-  Text,
   Dialog,
   Button,
   Icons,
@@ -20,6 +19,7 @@ import { SectionHeader } from "../components/SectionHeader";
 import hangup from "../assets/hangup.wav";
 import { rgba } from "polished";
 import { ringing } from "../stores/media";
+import { LoadingMessage } from "../components/LoadingMessage";
 
 export const MeetingSpace: FC<any> = observer(() => {
   const { mediaStore, urchatStore } = useStore();
@@ -84,64 +84,7 @@ export const MeetingSpace: FC<any> = observer(() => {
             alignItems="center"
           >
             <Campfire className="animate" />
-            {urchatStore.connectionState == "dialing" && (
-              <Flex mt={2}>
-                <Text mr={1} fontSize={5} fontWeight={400} opacity={0.9}>
-                  Dialing{" "}
-                </Text>
-                <Text fontSize={5} fontWeight={500} opacity={0.9}>
-                  {"~" + deSig(urchatStore.ongoingCall.call.peer)}
-                </Text>
-                <Text fontSize={5} fontWeight={400} opacity={0.9}>
-                  ...
-                </Text>
-              </Flex>
-            )}
-            {urchatStore.connectionState == "ringing" && (
-              <Flex mt={2}>
-                <Text mr={1} fontSize={5} fontWeight={400} opacity={0.9}>
-                  Waiting for{" "}
-                </Text>
-                <Text fontSize={5} fontWeight={500} opacity={0.9}>
-                  {"~" + deSig(urchatStore.ongoingCall.call.peer)} to answer the
-                  call
-                </Text>
-                <Text fontSize={5} fontWeight={400} opacity={0.9}>
-                  ...
-                </Text>
-              </Flex>
-            )}
-            {urchatStore.connectionState == "answering" && (
-              <Flex mt={2}>
-                <Text mr={1} fontSize={5} fontWeight={400} opacity={0.9}>
-                  Answering{" "}
-                </Text>
-                <Text fontSize={5} fontWeight={500} opacity={0.9}>
-                  {"~" + deSig(urchatStore.ongoingCall.call.peer)}&apos;s call
-                </Text>
-                <Text fontSize={5} fontWeight={400} opacity={0.9}>
-                  ...
-                </Text>
-              </Flex>
-            )}
-            {urchatStore.connectionState.includes("connected") && (
-              <>
-                <Flex mt={2}>
-                  <Text fontSize={5} fontWeight={400} opacity={0.9}>
-                    Please wait while you connect to{" "}
-                  </Text>
-                  <Text fontSize={5} fontWeight={500} opacity={0.9}>
-                    {"~" + deSig(urchatStore.ongoingCall.call.peer)}
-                  </Text>
-                  <Text fontSize={5} fontWeight={400} opacity={0.9}>
-                    ...
-                  </Text>
-                </Flex>
-                <Text fontSize={2} fontWeight={200} opacity={0.9}>
-                  may take a minute to start this p2p connection
-                </Text>
-              </>
-            )}
+            <LoadingMessage connectionState={urchatStore.connectionState} peer={urchatStore.ongoingCall.call.peer} />
             <Flex mt={3}>
               <Button
                 title="Hangup"
@@ -191,13 +134,13 @@ export const MeetingSpace: FC<any> = observer(() => {
           mb={3}
           style={{
             padding: 8,
-            gap: 4 ,
+            gap: 4,
             backgroundColor: "var(--rlm-card-color, #FBFBFB)"
           }}
         >
           <Flex gap={4} flexDirection="column">
             {/* TODO load contact store into local storage and lookup sigil metadata */}
-            <Ship patp={"~" + deSig(urchatStore.urbit.ship)} textColor="var(--rlm-text-color, #000000)"/>
+            <Ship patp={"~" + deSig(urchatStore.urbit.ship)} textColor="var(--rlm-text-color, #000000)" />
             {urchatStore.dataChannelOpen && (
               <Ship
                 patp={"~" + deSig(urchatStore.ongoingCall.call.peer)}

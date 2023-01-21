@@ -54,6 +54,9 @@ export class MediaStore implements IMediaStore {
   constructor() {
     this.local = new MediaStream();
     this.remote = new MediaStream();
+    this.remote.onremovetrack = function (event) {
+      console.warn('Removed: ', event.track.kind, event.track.label);
+    };
     this.remoteVideoTrackCounter = 0;
     this.video = {
       enabled: true,
@@ -128,9 +131,10 @@ export class MediaStore implements IMediaStore {
       console.log("stop local share screen");
       const removeTrack = (track: Track) => {
         console.log("Removing screenshare track from call", track);
+        track.enabled = false;
+        track.stop();
         this.local.removeTrack(track);
         call.conn?.removeTrack(track.sender);
-        track.stop();
       };
       runInAction(() => {
         this.sharedScreen.tracks.forEach(removeTrack);
@@ -178,6 +182,7 @@ export class MediaStore implements IMediaStore {
 
   addTrackToRemote(track: MediaStreamTrack) {
     this.remote.addTrack(track);
+
     // this is a hack so that state refreshes
     this.remoteVideoTrackCounter = this.remote.getVideoTracks().length;
   }
