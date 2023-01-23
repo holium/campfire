@@ -54,9 +54,6 @@ export class MediaStore implements IMediaStore {
   constructor() {
     this.local = new MediaStream();
     this.remote = new MediaStream();
-    this.remote.onremovetrack = function (event) {
-      console.warn('Removed: ', event.track.kind, event.track.label);
-    };
     this.remoteVideoTrackCounter = 0;
     this.video = {
       enabled: true,
