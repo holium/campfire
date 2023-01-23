@@ -19,6 +19,6 @@ script:
   - install:
     - cmd: 'install our %campfire'
       type: 'urbit:app'
-  # - makepublic:
+  # - makepublic: # this causes a failure
   #   - cmd: ':treaty|publish %campfire'
   #     type: 'urbit:dojo'
