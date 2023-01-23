@@ -1,6 +1,22 @@
 ;>
 
-# 0.1.17
+# 0.1.8
+
+## Bug fixes:
+
+- Fix some mis-colored text in the MediaInput dialog [#26](https://github.com/holium/campfire/pull/26)
+
+## Improvements:
+
+- Helper scripts for development [#24](https://github.com/holium/campfire/pull/24) [#25](https://github.com/holium/campfire/pull/25)
+- Fix some repo documentation [#25](https://github.com/holium/campfire/pull/25)
+- Make a "SettingsDialog" component to show ICE server and pals informtion [#26](https://github.com/holium/campfire/pull/26)
+- Remove some excess screensharing code [#26](https://github.com/holium/campfire/pull/26)
+- Use zuse 416 instead of 417 [#27](https://github.com/holium/campfire/pull/27)
+- Reogranize "loading messages" component [#28](https://github.com/holium/campfire/pull/28)
+
+
+# 0.1.7
 
 ## Bug fixes:
 
@@ -10,7 +26,7 @@
 
 ## Improvements:
 
-- Add support for Holium's Realm themeing [#11](https://github.com/holium/campfire/pull/11)
+- Add support for Holium's Realm theming [#11](https://github.com/holium/campfire/pull/11)
 - Add ability to control audio output device [#14](https://github.com/holium/campfire/pull/14)
 - Smart handling of selected media device in Media Settings [#15](https://github.com/holium/campfire/pull/15)
 
