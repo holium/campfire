@@ -14,18 +14,18 @@ import { Call } from "../components/Call";
 import { Campfire } from "../icons/Campfire";
 import { deSig } from "@urbit/api";
 import { useHistory } from "react-router";
-import "../styles/animations.css";
 import { SectionHeader } from "../components/SectionHeader";
 import hangup from "../assets/hangup.wav";
 import { rgba } from "polished";
 import { ringing } from "../stores/media";
 import { LoadingMessage } from "../components/LoadingMessage";
+import "../styles/animations.css";
 
 export const MeetingSpace: FC<any> = observer(() => {
   const { mediaStore, urchatStore } = useStore();
   const { push } = useHistory();
 
-  // hangup call (properly) if exiting page
+  // hangup call(properly) if exiting page
   useEffect(() => {
     window.addEventListener("beforeunload", urchatStore.hangup);
     return () => window.removeEventListener("beforeunload", urchatStore.hangup);
@@ -115,56 +115,61 @@ export const MeetingSpace: FC<any> = observer(() => {
         )}
         {urchatStore.dataChannelOpen && <Call />}
       </Flex>
-      <Flex width="25%" flexDirection="column" gap={6} m={10} height="90%">
-        <SectionHeader
-          header="Participants"
-          icon={
-            <Icons.Participants
-              opacity={0.5}
-              fontSize="20px"
-              color="var(--rlm-icon-color, #000000)"
-              aria-hidden
-            />
-          }
-        />
-        <Card
-          elevation="none"
-          borderRadius={9}
-          mt={1}
-          mb={3}
-          style={{
-            padding: 8,
-            gap: 4,
-            backgroundColor: "var(--rlm-card-color, #FBFBFB)"
-          }}
-        >
-          <Flex gap={4} flexDirection="column">
-            {/* TODO load contact store into local storage and lookup sigil metadata */}
-            <Ship patp={"~" + deSig(urchatStore.urbit.ship)} textColor="var(--rlm-text-color, #000000)" />
-            {urchatStore.dataChannelOpen && (
-              <Ship
-                patp={"~" + deSig(urchatStore.ongoingCall.call.peer)}
-                textColor="var(--rlm-text-color, #000000)"
+      <Flex width="25%" flexDirection="column" m={10} height="90%" style={{ justifyContent: 'space-between' }}>
+        <Flex flexDirection="column" className='pb-1' gap={6}>
+          <SectionHeader
+            header="Participants"
+            icon={
+              <Icons.Participants
+                opacity={0.5}
+                fontSize="20px"
+                color="var(--rlm-icon-color, #000000)"
+                aria-hidden
               />
-            )}
-          </Flex>
-        </Card>
-        <SectionHeader
-          header="Chat"
-          icon={
-            <Icons.ChatLine
-              opacity={0.5}
-              fontSize="20px"
-              color="var(--rlm-icon-color, #000000)"
-              aria-hidden
-            />
-          }
-        />
-        <Chat
-          ready={urchatStore.dataChannelOpen}
-          messages={urchatStore.messages}
-          sendMessage={sendMessage}
-        />
+            }
+          />
+          <Card
+            elevation="none"
+            borderRadius={9}
+            mt={1}
+            mb={3}
+            style={{
+              padding: 8,
+              gap: 4,
+              backgroundColor: "var(--rlm-card-color, #FBFBFB)"
+            }}
+
+          >
+            <Flex gap={4} flexDirection="column">
+              {/* TODO load contact store into local storage and lookup sigil metadata */}
+              <Ship patp={"~" + deSig(urchatStore.urbit.ship)} textColor="var(--rlm-text-color, #000000)" />
+              {urchatStore.dataChannelOpen && (
+                <Ship
+                  patp={"~" + deSig(urchatStore.ongoingCall.call.peer)}
+                  textColor="var(--rlm-text-color, #000000)"
+                />
+              )}
+            </Flex>
+          </Card>
+        </Flex>
+        <Flex flexDirection="column" gap={6} height='100%' overflowY='hidden'>
+          <SectionHeader
+            header="Chat"
+            icon={
+              <Icons.ChatLine
+                opacity={0.5}
+                fontSize="20px"
+                color="var(--rlm-icon-color, #000000)"
+                aria-hidden
+              />
+            }
+          />
+          <Chat
+            ready={urchatStore.dataChannelOpen}
+            messages={urchatStore.messages}
+            sendMessage={sendMessage}
+          />
+        </Flex>
       </Flex>
       <Dialog
         title="Remote Hangup"

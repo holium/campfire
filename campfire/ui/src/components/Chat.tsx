@@ -39,6 +39,7 @@ export const Chat = observer(({ sendMessage, messages, ready }: ChatProps) => {
       elevation="none"
       borderRadius={9}
       height="100%"
+      maxHeight='calc(100% - 43px)'
       style={{
         padding: 8,
         display: "flex",
@@ -47,24 +48,32 @@ export const Chat = observer(({ sendMessage, messages, ready }: ChatProps) => {
         backgroundColor: "var(--rlm-card-color, #FBFBFB)"
       }}
     >
-      <Flex flexDirection="column" flexGrow={1}>
-        <Flex mx={1} flexDirection="column-reverse" justifyContent="flex-start">
-          {messages.map((msg, idx) => (
-            <Flex key={idx}>
-              <Text fontSize={3} className="font-bold mr-3">
-                {msg.speaker}:
-              </Text>
-              <Text fontSize={3} className="break-words w-5/6">{msg.message}</Text>
-            </Flex>
-          ))}
-        </Flex>
-        {messages.length === 0 && (
+      <Flex flexDirection="column" flexGrow={1} height="calc(100% - 42px)"
+      >
+        {messages.length > 0 ?
+          <Flex height="100%" mx={1} flexDirection="column-reverse" justifyContent="flex-start"
+            style={{
+              marginBottom: 8,
+              overflowY: 'auto',
+              overflowX: 'hidden'
+            }}
+          >
+            {messages.map((msg, idx) => (
+              <Flex key={idx}>
+                <Text fontSize={3} className="font-bold mr-3">
+                  {msg.speaker}:
+                </Text>
+                <Text fontSize={3} className="break-words w-5/6">{msg.message}</Text>
+              </Flex>
+            ))}
+          </Flex>
+          :
           <Flex flexGrow={1} alignItems="center" justifyContent="center">
             <Text opacity={0.7} fontSize={3} textAlign={"center"}>
               No messages yet
             </Text>
           </Flex>
-        )}
+        }
       </Flex>
       <Flex>
         <Input
@@ -106,7 +115,7 @@ export const Chat = observer(({ sendMessage, messages, ready }: ChatProps) => {
           }}
         />
       </Flex>
-    </Card>
+    </Card >
   );
 });
 
