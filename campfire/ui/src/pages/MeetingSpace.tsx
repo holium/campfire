@@ -25,7 +25,7 @@ export const MeetingSpace: FC<any> = observer(() => {
   const { mediaStore, urchatStore } = useStore();
   const { push } = useHistory();
 
-  // hangup call(properly) if exiting page
+  // hangup call (properly) if exiting page
   useEffect(() => {
     window.addEventListener("beforeunload", urchatStore.hangup);
     return () => window.removeEventListener("beforeunload", urchatStore.hangup);
@@ -115,7 +115,7 @@ export const MeetingSpace: FC<any> = observer(() => {
         )}
         {urchatStore.dataChannelOpen && <Call />}
       </Flex>
-      <Flex width="25%" flexDirection="column" m={10} height="90%" style={{ justifyContent: 'space-between' }}>
+      <Flex width="25%" flexDirection="column" m={10} height="90%" >
         <Flex flexDirection="column" className='pb-1' gap={6}>
           <SectionHeader
             header="Participants"
