@@ -45,6 +45,7 @@ interface IUrchatStore {
   icepond: Icepond;
   configuration: RTCConfiguration;
   incomingCall: UrbitRTCIncomingCallEvent;
+  incomingFileTransfer: boolean;
   fileTransfers: FileTransfer[];
   updateFileTransfer: (fileTransfer: FileTransfer) => void;
   setFileTransfers: (fileTransfers: FileTransfer[]) => void;
@@ -324,7 +325,6 @@ export class UrchatStore implements IUrchatStore {
   }
 
   clearFileTransfers() {
-
     this.fileTransfers.forEach(x => {
       window.URL.revokeObjectURL(x.url)
     })
