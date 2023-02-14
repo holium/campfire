@@ -14,6 +14,7 @@ import packageJson from "../../package.json";
 import { createField, createForm } from "mobx-easy-form";
 import { resetRing, ringing } from "../stores/media";
 import { SettingsDialog } from "../components/SettingsDialog";
+import { handleIncomingFileTransfer, isFileTransferChannel } from "../components/ShareFileDialog";
 
 export const StartMeetingPage: FC<any> = observer(() => {
   document.title = "Campfire";
@@ -68,6 +69,9 @@ export const StartMeetingPage: FC<any> = observer(() => {
       mediaStore.getDevices(call);
       urchatStore.setDataChannelOpen(false);
       urchatStore.setMessages([]);
+      urchatStore.setFileTransfers([]);
+      urchatStore.setIncomingFileTransfer(false);
+
       const channel = call.conn.createDataChannel("campfire");
       channel.onopen = () => {
         ringing.pause();
@@ -86,6 +90,15 @@ export const StartMeetingPage: FC<any> = observer(() => {
       };
       urchatStore.setDataChannel(channel);
       call.conn.ontrack = onTrack;
+
+      // handles receiving files on the caller side
+      call.conn.addEventListener("datachannel", (evt) => {
+        const channel = evt.channel;
+
+        if (isFileTransferChannel(channel.label)) {
+          handleIncomingFileTransfer(channel, urchatStore);
+        }
+      });
     });
   };
 
@@ -100,18 +113,28 @@ export const StartMeetingPage: FC<any> = observer(() => {
       push(`/chat/${conn.uuid}`);
       urchatStore.setDataChannelOpen(false);
       urchatStore.setMessages([]);
+      urchatStore.setFileTransfers([]);
+      urchatStore.setIncomingFileTransfer(false);
+
       conn.addEventListener("datachannel", (evt) => {
         const channel = evt.channel;
-        channel.onopen = () => urchatStore.setDataChannelOpen(true);
-        channel.onmessage = (evt) => {
-          const data = evt.data;
-          const new_messages = [{ speaker: peer, message: data }].concat(
-            urchatStore.messages
-          );
-          urchatStore.setMessages(new_messages);
-          console.log("channel message from me to: " + data);
-        };
-        urchatStore.setDataChannel(channel);
+
+        if (isFileTransferChannel(channel.label)) {
+          handleIncomingFileTransfer(channel, urchatStore);
+        }
+        else {   // normal urchat channel
+          channel.onopen = () => urchatStore.setDataChannelOpen(true);
+          channel.onmessage = (evt) => {
+            const data = evt.data;
+            const new_messages = [{ speaker: peer, message: data }].concat(
+              urchatStore.messages
+            );
+            urchatStore.setMessages(new_messages);
+            console.log("channel message from me to: " + data);
+          };
+          urchatStore.setDataChannel(channel);
+        }
+
       });
       conn.ontrack = onTrack;
     });
@@ -227,6 +250,7 @@ export const StartMeetingPage: FC<any> = observer(() => {
           rejectCall={() => {
             ringing.pause();
             urchatStore.rejectCall();
+            urchatStore.hungup();
           }}
         />
       )}

@@ -20,7 +20,7 @@ function App() {
               <MeetingSpace />
             </Route>
             {/* Catch all for anything else */}
-            <Route path="*"> 
+            <Route path="*">
               <Redirect to="/" />
             </Route>
           </Switch>

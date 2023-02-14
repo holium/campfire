@@ -12,6 +12,8 @@ import { MediaInput } from "./MediaInput";
 import { useStore } from "../stores/root";
 import { observer } from "mobx-react";
 import { Card } from "@holium/design-system";
+import { MdUploadFile } from 'react-icons/md';
+import { ShareFile, } from "./ShareFileDialog";
 
 type ControlsProps = HTMLAttributes<HTMLDivElement>;
 
@@ -90,8 +92,18 @@ export const Controls = observer(({ className }: ControlsProps) => {
             />
             <span className="sr-only">Devices</span>
           </DialogTrigger>
-          <DialogContent className="w-64 max-w-xl py-8 px-8">
+          <DialogContent className="w-64 max-w-xl py-8 px-8 rounded-xl">
             <MediaInput />
+          </DialogContent>
+        </Dialog>
+        <Dialog open={urchatStore.incomingFileTransfer ? true : undefined} onOpenChange={(open) => open == false && urchatStore.incomingFileTransfer && urchatStore.setIncomingFileTransfer(false)}>
+          <DialogTrigger className="flex justify-center items-center  w-10 h-10 text-gray-600 bg-gray-100 rounded-full default-ring"
+          >
+            <MdUploadFile className="w-6 h-6" />
+            <span className="sr-only">Share File</span>
+          </DialogTrigger>
+          <DialogContent className="rounded-xl">
+            <ShareFile />
           </DialogContent>
         </Dialog>
         <button
@@ -107,6 +119,6 @@ export const Controls = observer(({ className }: ControlsProps) => {
           <span className="sr-only">Hang up</span>
         </button>
       </div>
-    </Card>
+    </Card >
   );
 });

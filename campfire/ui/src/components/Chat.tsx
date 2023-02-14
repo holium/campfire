@@ -89,19 +89,22 @@ export const Chat = observer(({ sendMessage, messages, ready }: ChatProps) => {
           spellCheck={false}
           rightInteractive
           rightIcon={
-            <IconButton
-              color="brand.primary"
-              disabled={
-                !message.computed.isDirty ||
-                message.computed.ifWasEverBlurredThenError !== undefined ||
-                message.computed.error !== undefined
-              }
-              onClick={() => {
-                onSubmitMessage();
-              }}
-            >
-              <Icons.ArrowRight opacity={0.8} />
-            </IconButton>
+            <Flex flexDirection='row' className='gap-2' >
+              <IconButton
+                color="brand.primary"
+                disabled={
+                  !message.computed.isDirty ||
+                  message.computed.ifWasEverBlurredThenError !== undefined ||
+                  message.computed.error !== undefined
+                }
+                onClick={() => {
+                  onSubmitMessage();
+                }}
+              >
+                <Icons.ArrowRight opacity={0.8} />
+              </IconButton>
+            </Flex >
+
           }
           onKeyDown={(event: KeyboardEvent) => {
             if (event.key === "Enter" && !event.shiftKey) {

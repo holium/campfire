@@ -26,7 +26,7 @@ export const SettingsDialog = () => {
 
 
   return (
-    <div className="settingsDialog">
+    <div className="settingsDialog rounded-xl">
       <div className="iceServers">
         <Text fontSize={6} fontWeight={500}>
           ICE Servers

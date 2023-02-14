@@ -28,7 +28,12 @@ export const MeetingSpace: FC<any> = observer(() => {
   // hangup call (properly) if exiting page
   useEffect(() => {
     window.addEventListener("beforeunload", urchatStore.hangup);
-    return () => window.removeEventListener("beforeunload", urchatStore.hangup);
+    window.addEventListener("beforeunload", urchatStore.clearFileTransfers);
+
+    return () => {
+      window.removeEventListener("beforeunload", urchatStore.hangup);
+      window.removeEventListener("beforeunload", urchatStore.clearFileTransfers);
+    }
   }, []);
 
   // update devices if chrome devices change (like a USB microphone gets plugged in)
@@ -52,6 +57,7 @@ export const MeetingSpace: FC<any> = observer(() => {
     );
     urchatStore.setMessages(newMessages);
   };
+
   // ---------------------------------------------------------------
   // ---------------------------------------------------------------
   // ---------------------------------------------------------------

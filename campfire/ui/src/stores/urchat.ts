@@ -19,9 +19,24 @@ export interface OngoingCall {
   conn: UrbitRTCPeerConnection;
   call: Call;
 }
+
 export interface Message {
   speaker: string;
   message: string;
+}
+
+export type Status = 'Waiting' | 'Ongoing' | 'Rejected' | 'Completed' | 'Errored' | 'Cancelled';
+
+export interface FileTransfer {
+  owner: string;
+  receiver: string;
+  fileName: string,
+  fileSize: number,
+  fileType: string,
+  status: Status,
+  channel: RTCDataChannel,
+  url: string;
+  progress: number;
 }
 
 interface IUrchatStore {
@@ -30,6 +45,10 @@ interface IUrchatStore {
   icepond: Icepond;
   configuration: RTCConfiguration;
   incomingCall: UrbitRTCIncomingCallEvent;
+  fileTransfers: FileTransfer[];
+  updateFileTransfer: (fileTransfer: FileTransfer) => void;
+  setFileTransfers: (fileTransfers: FileTransfer[]) => void;
+  setNewFileTransfer: (fileTransfer: FileTransfer) => void;
   ongoingCall: OngoingCall;
   dataChannel: RTCDataChannel;
   dataChannelOpen: boolean;
@@ -51,6 +70,7 @@ interface IUrchatStore {
   hungup: () => void;
   makeFalseWasHungUp: () => void;
   setMessages: (new_mesages: Message[]) => void;
+  clearFileTransfers: () => void;
 }
 
 export class UrchatStore implements IUrchatStore {
@@ -59,6 +79,8 @@ export class UrchatStore implements IUrchatStore {
   icepond: Icepond;
   configuration: RTCConfiguration;
   incomingCall: UrbitRTCIncomingCallEvent;
+  incomingFileTransfer: boolean;
+  fileTransfers: FileTransfer[];
   ongoingCall: OngoingCall;
   dataChannel: RTCDataChannel;
   dataChannelOpen: boolean;
@@ -72,7 +94,7 @@ export class UrchatStore implements IUrchatStore {
     console.log("make constructor");
     this.urbit = new Urbit("", "");
     // requires <script> tag for /~landscape/js/session.js
-    this.urbit.ship = (window as Window & typeof globalThis & {ship: string} ).ship;
+    this.urbit.ship = (window as Window & typeof globalThis & { ship: string }).ship;
     this.urbit.verbose = true;
     this.urbitRtcApp = new UrbitRTCApp(dap, this.configuration);
     this.urbitRtcApp.addEventListener(
@@ -89,6 +111,8 @@ export class UrchatStore implements IUrchatStore {
     this.dataChannel = null;
     this.dataChannelOpen = false;
     this.messages = [];
+    this.fileTransfers = [];
+    this.incomingFileTransfer = false;
     this.connectionState = null;
     this.wasHungUp = false;
 
@@ -99,15 +123,18 @@ export class UrchatStore implements IUrchatStore {
       icepond: observable,
       ongoingCall: observable,
       incomingCall: observable,
+      incomingFileTransfer: observable,
       isCaller: observable,
       dataChannelOpen: observable,
       messages: observable,
       connectionState: observable,
       wasHungUp: observable,
+      fileTransfers: observable,
       setUrbit: action.bound,
       handleIncomingCall: action.bound,
       setDataChannel: action.bound,
       setDataChannelOpen: action.bound,
+      startFileTransfer: action.bound,
       startIcepond: action.bound,
       placeCall: action.bound,
       answerCall: action.bound,
@@ -117,6 +144,11 @@ export class UrchatStore implements IUrchatStore {
       hungup: action.bound,
       makeFalseWasHungUp: action.bound,
       setMessages: action.bound,
+      setNewFileTransfer: action.bound,
+      setFileTransfers: action.bound,
+      updateFileTransfer: action.bound,
+      setIncomingFileTransfer: action.bound,
+      clearFileTransfers: action.bound
     });
   }
 
@@ -144,6 +176,16 @@ export class UrchatStore implements IUrchatStore {
   }
   setDataChannelOpen(value: boolean) {
     this.dataChannelOpen = value;
+  }
+
+  setIncomingFileTransfer(value: boolean) {
+    runInAction(() => {
+      this.incomingFileTransfer = value;
+    });
+  }
+
+  async startFileTransfer(setHandlers: (call: OngoingCall) => void) {
+    setHandlers(this.ongoingCall)
   }
 
   startIcepond() {
@@ -264,4 +306,30 @@ export class UrchatStore implements IUrchatStore {
     console.log("setting messages to: " + new_messages);
     this.messages = new_messages;
   }
+
+  setFileTransfers(fileTransfers: FileTransfer[]) {
+    this.fileTransfers = fileTransfers;
+  }
+
+  setNewFileTransfer(fileTransfer: FileTransfer) {
+    this.fileTransfers = [fileTransfer].concat(this.fileTransfers);
+  }
+
+  getFileTransferByChannelLabel(label: string) {
+    return this.fileTransfers.filter(fileTransfer => fileTransfer.channel.label === label)[0];
+  }
+
+  updateFileTransfer(fileTransfer: FileTransfer) {
+    this.fileTransfers = this.fileTransfers.map(obj => obj.channel.label === fileTransfer.channel.label ? fileTransfer : obj);
+  }
+
+  clearFileTransfers() {
+
+    this.fileTransfers.forEach(x => {
+      window.URL.revokeObjectURL(x.url)
+    })
+
+    this.fileTransfers = [];
+  }
+
 }

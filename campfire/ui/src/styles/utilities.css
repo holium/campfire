@@ -2,3 +2,8 @@
   @apply focus:ring-2 focus:outline-none;
   --tw-ring-color: var(--rlm-accent-color, #F8E390);
 }
+
+.default-ring-always {
+  @apply ring-2 outline-none;
+  --tw-ring-color: var(--rlm-accent-color, #F8E390);
+}
