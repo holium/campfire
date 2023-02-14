@@ -8,6 +8,7 @@ interface PalsListProps {
   mutuals: string[];
 }
 export const PalsList = observer(({ mutuals, callPal }: PalsListProps) => {
+
   if (mutuals?.length > 0) {
     return (
       <>
@@ -22,7 +23,7 @@ export const PalsList = observer(({ mutuals, callPal }: PalsListProps) => {
         <Flex alignItems="flex-start" gap={6} flexDirection="column">
           {mutuals.map((shipName) => {
             return (
-              <Button key={shipName} onClick={() => callPal(shipName)}>
+              <Button key={shipName} onClick={() => callPal(shipName)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Ship patp={`~${deSig(shipName)}`} />
               </Button>
             );

@@ -21,7 +21,7 @@ export const IncomingCall = observer(
     }, []);
 
     return (
-      <div className="fixed top-4 right-4">
+      <div className="fixed  w-full px-2 sm:px-0 sm:w-auto justify-center sm:top-4 sm:right-4">
         <Card
           elevation="two"
           style={{

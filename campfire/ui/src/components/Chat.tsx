@@ -39,7 +39,7 @@ export const Chat = observer(({ sendMessage, messages, ready }: ChatProps) => {
       elevation="none"
       borderRadius={9}
       height="100%"
-      maxHeight='calc(100% - 43px)'
+      maxHeight='calc(100% - 43px)'  // 43px is the height of the Chat Section Title
       style={{
         padding: 8,
         display: "flex",
@@ -48,7 +48,7 @@ export const Chat = observer(({ sendMessage, messages, ready }: ChatProps) => {
         backgroundColor: "var(--rlm-card-color, #FBFBFB)"
       }}
     >
-      <Flex flexDirection="column" flexGrow={1} height="calc(100% - 42px)"
+      <Flex flexDirection="column" flexGrow={1} height="calc(100% - 42px)"  //  42px is the height of input
       >
         {messages.length > 0 ?
           <Flex height="100%" mx={1} flexDirection="column-reverse" justifyContent="flex-start"
