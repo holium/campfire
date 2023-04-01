@@ -21,7 +21,7 @@ export const IncomingCall = observer(
     }, []);
 
     return (
-      <div className="fixed  w-full px-2 sm:px-0 sm:w-auto justify-center sm:top-4 sm:right-4">
+      <div className="fixed px-2 sm:px-0 sm:w-auto justify-center top-4 sm:right-4">
         <Card
           elevation="two"
           style={{
@@ -30,8 +30,8 @@ export const IncomingCall = observer(
             borderColor: "transparent",
             background: "#3E4345",
           }}
-          minWidth={400}
-          width="fit-content"
+          minWidth='min(400px, 100%)'
+          width='fit-content'
         >
           <Flex gap={12} flexDirection="row" alignItems="center">
             <Sigil

@@ -25,7 +25,7 @@ export interface Message {
   message: string;
 }
 
-export type Status = 'Waiting' | 'Ongoing' | 'Rejected' | 'Completed' | 'Errored' | 'Cancelled';
+export type FileTransferStatus = 'Waiting' | 'Ongoing' | 'Rejected' | 'Completed' | 'Errored' | 'Cancelled';
 
 export interface FileTransfer {
   owner: string;
@@ -33,7 +33,7 @@ export interface FileTransfer {
   fileName: string,
   fileSize: number,
   fileType: string,
-  status: Status,
+  status: FileTransferStatus,
   channel: RTCDataChannel,
   url: string;
   progress: number;

@@ -55,7 +55,7 @@ export const handleIncomingFileTransfer = (channel: RTCDataChannel, urchatStore:
             }
             else {  // other side is sending the file info? 
 
-                let object = JSON.parse(data);
+                const object = JSON.parse(data);
 
                 if (object.action == 'Request') {
 
@@ -96,7 +96,7 @@ export const isFileTransferChannel = (label: string) => {
 
 type TabOption = 'Share' | 'Files';
 
-export const ShareFile = observer(() => {
+export const ShareFileDialog = observer(() => {
     const { urchatStore } = useStore();
     const inputRef = useRef<HTMLInputElement>();
     const [files, setFiles] = useState<FileList>();
@@ -112,7 +112,7 @@ export const ShareFile = observer(() => {
 
         for (var i = 0; i < files.length; i++) {
 
-            let file = files.item(i);
+            const file = files.item(i);
 
             await urchatStore.startFileTransfer((call) => {
 
@@ -150,7 +150,7 @@ export const ShareFile = observer(() => {
                     const { data } = evt;
 
                     try {
-                        let object = JSON.parse(data);
+                        const object = JSON.parse(data);
                         if (object.action == 'Accept') { // other side has accepted
                             let fileTransfer = urchatStore.getFileTransferByChannelLabel(channel.label);
                             fileTransfer.status = 'Ongoing';
@@ -262,21 +262,21 @@ export const ShareFile = observer(() => {
     }
 
     return (
-        <div className="overflow-hidden rounded-xl">
-            <Flex className=" h-min relative  px-8 "
+        <div className="overflow-hidden rounded-xl ">
+            <Flex className="h-min relative px-8"
                 flexDirection='column'
                 gap={16}
                 style={{
+                    width: '500px',
                     minHeight: '500px',
                     maxHeight: 'min(80vh, 800px)',
-                    width: '500px',
-                    maxWidth: '500px',
+                    maxWidth: 'min(500px, 100vw)',
                     overflowY: 'auto',
                     overflowX: 'hidden',
                 }}
             >
                 <Flex className='w-full sticky py-4 pb-2 z-10 top-0 baseColor' justifyContent='center' alignItems='center'>
-                    <Card >
+                    <Card>
                         <Button className='whitespace-nowrap' variant={tabOpen == 'Share' ? 'primary' : 'secondary'}
                             onClick={() => setTabOpen('Share')}
                             style={{ width: '130px' }}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useStore } from '../stores/root';
-import { Text } from "@holium/design-system";
+import { Flex, Text } from "@holium/design-system";
 
 // eslint-disable-next-line
 export const SettingsDialog = () => {
@@ -26,32 +26,41 @@ export const SettingsDialog = () => {
 
 
   return (
-    <div className="settingsDialog rounded-xl">
-      <div className="iceServers">
-        <Text fontSize={6} fontWeight={500}>
-          ICE Servers
-        </Text>
-        <span>Below are the ICE servers that Campfire is currently configured to use for establshing it's peer-to-peer connections. These servers can be set for your ship, and some may be fetched from your sponsor.</span>
+    <div className="settingsDialog rounded-xl overflow-hidden ">
+      <Flex className="h-min w-full rounded-xl max-h-full pt-4 pb-6 px-8"
+        flexDirection='column'
+        style={{
+          maxHeight: '100vh',
+          overflowY: 'auto',
+          overflowX: 'hidden',
+        }}
+      >
+        <div className="iceServers">
+          <Text fontSize={6} fontWeight={500}>
+            ICE Servers
+          </Text>
+          <span>Below are the ICE servers that Campfire is currently configured to use for establshing it's peer-to-peer connections. These servers can be set for your ship, and some may be fetched from your sponsor.</span>
+          <br />
+          <br />
+          <ul>
+            {servers.map((server, idx) => (
+              <li key={idx}>{server.urls}</li>
+            ))}
+          </ul>
+          <br />
+          <a href="/docs/campfire/iceservers" title="link to %docs" target="_blank" rel="noopener noreferrer">
+            <span>%docs for configuring ICE servers</span>
+          </a>
+          {/* <Button onClick={clickButton}>Add new server</Button> */}
+        </div>
         <br />
-        <br />
-        <ul>
-          {servers.map((server, idx) => (
-            <li key={idx}>{server.urls}</li>
-          ))}
-        </ul>
-        <br />
-        <a href="/docs/campfire/iceservers" title="link to %docs" target="_blank" rel="noopener noreferrer">
-          <span>%docs for configuring ICE servers</span>
-        </a>
-        {/* <Button onClick={clickButton}>Add new server</Button> */}
-      </div>
-      <br />
-      <div>
-        <Text fontSize={6} fontWeight={500} >
-          Extras
-        </Text>
-        <Text>Install %pals from <b>~paldev</b> and make some friends for SpeedDial capabilities.</Text>
-      </div>
+        <div>
+          <Text fontSize={6} fontWeight={500} >
+            Extras
+          </Text>
+          <Text>Install %pals from <b>~paldev</b> and make some friends for SpeedDial capabilities.</Text>
+        </div>
+      </Flex>
     </div>
   );
 }

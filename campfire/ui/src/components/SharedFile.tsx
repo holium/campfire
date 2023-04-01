@@ -80,13 +80,10 @@ export const SharedFile = ({ fileTransfer }) => {
 
     const cancelTransfer = (fileTransfer: FileTransfer) => {
 
-        console.log('cancelling: ', fileTransfer)
-
         fileTransfer.status = 'Cancelled';
 
         urchatStore.updateFileTransfer(fileTransfer);
 
-        console.log('sending action')
         fileTransfer.channel.send(JSON.stringify({
             action: 'Cancel'
         }))

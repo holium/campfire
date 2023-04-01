@@ -70,18 +70,16 @@ export const MeetingSpace: FC<any> = observer(() => {
       width="100%"
       justifyContent="center"
       alignItems="center"
-      flexDirection="row"
-      className="windowColor"
+      className="windowColor flex-col sm:flex-row px-4 sm:px-0"
     >
       <Flex
         style={{ position: "relative" }}
         borderRadius={20}
-        width="75%"
         height="90%"
         m={10}
         justifyContent="center"
         alignItems="center"
-        className="baseColor"
+        className="baseColor w-full sm:w-3/4"
       >
         {!urchatStore.dataChannelOpen && urchatStore.ongoingCall && (
           <Flex
@@ -89,6 +87,7 @@ export const MeetingSpace: FC<any> = observer(() => {
             width="100%"
             justifyContent="center"
             alignItems="center"
+            className='p-4 sm:p-0'
           >
             <Campfire className="animate" />
             <LoadingMessage connectionState={urchatStore.connectionState} peer={urchatStore.ongoingCall.call.peer} />
@@ -122,7 +121,7 @@ export const MeetingSpace: FC<any> = observer(() => {
         )}
         {urchatStore.dataChannelOpen && <Call />}
       </Flex>
-      <Flex width="25%" flexDirection="column" m={10} height="90%" >
+      <Flex flexDirection="column" m={10} height="90%" className="w-full sm:w-1/4">
         <Flex flexDirection="column" className='pb-1' gap={6}>
           <SectionHeader
             header="Participants"

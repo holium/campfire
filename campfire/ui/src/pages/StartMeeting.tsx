@@ -34,8 +34,8 @@ export const StartMeetingPage: FC<any> = observer(() => {
   // if the path looks like /apps/campfire/call/zod
   // starts call with zod
   useEffect(() => {
-    let path = location.pathname;
-    let patp = path.split('/call/').pop();
+    const path = location.pathname;
+    const patp = path.split('/call/').pop();
 
     if (path.includes('/call/') && patp && isValidPatp('~' + deSig(patp))) {
       placeCall(deSig(patp))
@@ -179,7 +179,7 @@ export const StartMeetingPage: FC<any> = observer(() => {
       className="windowColor fixed top-0 left-0 w-full h-full"
     >
       <Flex
-        className='flex-col-reverse  sm:flex-row w-full sm:w-1/2 px-4 sm:px-0 '
+        className='flex-col-reverse sm:flex-row w-full sm:w-1/2 px-4 sm:px-0'
         justifyContent="space-between"
         alignItems='center'
       >
@@ -294,7 +294,7 @@ export const StartMeetingPage: FC<any> = observer(() => {
                 Settings
               </Text>
             </DialogTrigger>
-            <DialogContent className="w-200 min-h-60 max-w-xl pt-4 pb-6 px-8">
+            <DialogContent className="w-200 max-w-xl  rounded-xl ">
               <SettingsDialog />
             </DialogContent>
           </Dialog>
