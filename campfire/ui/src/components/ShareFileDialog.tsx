@@ -29,14 +29,14 @@ export const handleIncomingFileTransfer = (channel: RTCDataChannel, urchatStore:
                 totalReceivedBytes += data.byteLength;
 
                 // updates progress
-                let fileTransfer = urchatStore.getFileTransferByChannelLabel(channel.label);
+                const fileTransfer = urchatStore.getFileTransferByChannelLabel(channel.label);
                 fileTransfer.progress = Math.trunc((totalReceivedBytes) / (fileSize / 100));
                 urchatStore.updateFileTransfer(fileTransfer);
 
                 receivedBuffers.push(data);
             }
             else if (data == END_OF_FILE_MESSAGE) {  // is end of file
-                let fileTransfer = urchatStore.getFileTransferByChannelLabel(channel.label);
+                const fileTransfer = urchatStore.getFileTransferByChannelLabel(channel.label);
                 const blob = createBlob(receivedBuffers, totalReceivedBytes, fileTransfer.fileType);
                 fileTransfer.url = window.URL.createObjectURL(blob);
                 fileTransfer.status = FileTransferStatus.Completed;
@@ -75,7 +75,7 @@ export const handleIncomingFileTransfer = (channel: RTCDataChannel, urchatStore:
 
                 }
                 else if (object.action == 'Cancel') {
-                    let fileTransfer = urchatStore.getFileTransferByChannelLabel(channel.label);
+                    const fileTransfer = urchatStore.getFileTransferByChannelLabel(channel.label);
                     fileTransfer.status = FileTransferStatus.Cancelled;
                     urchatStore.updateFileTransfer(fileTransfer);
                     channel.close();
@@ -109,7 +109,7 @@ export const ShareFileDialog = observer(() => {
 
         if (!files || files.length == 0) return;
 
-        for (var i = 0; i < files.length; i++) {
+        for (let i = 0; i < files.length; i++) {
             const file = files.item(i);
             await urchatStore.startFileTransfer((call) => {
 
@@ -149,7 +149,7 @@ export const ShareFileDialog = observer(() => {
                     try {
                         const object = JSON.parse(data);
                         if (object.action == 'Accept') { // other side has accepted
-                            let fileTransfer = urchatStore.getFileTransferByChannelLabel(channel.label);
+                            const fileTransfer = urchatStore.getFileTransferByChannelLabel(channel.label);
                             fileTransfer.status = FileTransferStatus.Ongoing;
 
                             urchatStore.updateFileTransfer(fileTransfer);
@@ -157,7 +157,7 @@ export const ShareFileDialog = observer(() => {
                             const arrayBuffer = await file.arrayBuffer();
 
                             let paused = false;
-                            let queue = [];
+                            const queue: any[] = [];
                             let totalBytesSent = 0;
                             let hasCancelled = false;
 
@@ -194,7 +194,7 @@ export const ShareFileDialog = observer(() => {
                                             totalBytesSent += message.byteLength;
                                         }
 
-                                        let fileTransfer = urchatStore.getFileTransferByChannelLabel(channel.label);
+                                        const fileTransfer = urchatStore.getFileTransferByChannelLabel(channel.label);
 
                                         if (fileTransfer.status !== FileTransferStatus.Cancelled) {
                                             fileTransfer.progress = Math.trunc((totalBytesSent) / (fileTransfer.fileSize / 100));
@@ -225,14 +225,14 @@ export const ShareFileDialog = observer(() => {
 
                         }
                         else if (object.action === 'Reject') {
-                            let fileTransfer = urchatStore.getFileTransferByChannelLabel(channel.label);
+                            const fileTransfer = urchatStore.getFileTransferByChannelLabel(channel.label);
                             fileTransfer.status = FileTransferStatus.Rejected;
                             urchatStore.updateFileTransfer(fileTransfer);
 
                             channel.close();
                         }
                         else if (object.action === 'Cancel') {
-                            let fileTransfer = urchatStore.getFileTransferByChannelLabel(channel.label);
+                            const fileTransfer = urchatStore.getFileTransferByChannelLabel(channel.label);
                             fileTransfer.status = FileTransferStatus.Cancelled;
                             urchatStore.updateFileTransfer(fileTransfer);
 

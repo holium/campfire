@@ -7,8 +7,14 @@ import { useStore } from "../stores/root";
 import { FileTransfer, FileTransferStatus } from "../stores/urchat";
 import { downloadFile, formatBytes } from "../util";
 
-export const SharedFile = ({ fileTransfer }) => {
+
+interface SharedFileProps {
+    fileTransfer: FileTransfer
+}
+
+export const SharedFile = ({ fileTransfer }: SharedFileProps) => {
     const { urchatStore } = useStore();
+
 
     const renderByFileStatus = (fileTransfer: FileTransfer) => {
         switch (fileTransfer.status) {
