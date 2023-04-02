@@ -1,5 +1,19 @@
 ;>
 
+# 0.1.9
+
+## Improvements:
+
+- switch to zuse 415 by @datryn-ribdun in [#30](https://github.com/holium/campfire/pull/30)
+- Share files with participants in call + URL speed dial + CSS fixes by ~fidwed-sipwyn in [#32](https://github.com/holium/campfire/pull/32)
+- File upload improvements by @datryn-ribdun in  [#35](https://github.com/holium/campfire/pull/35)
+- add support for zuse 414 by @datryn-ribdun in [#36](https://github.com/holium/campfire/pull/36)
+
+## New Contributors
+
+- ~fidwed-sipwyn made their first contribution in [#32](https://github.com/holium/campfire/pull/32)
+
+
 # 0.1.8
 
 ## Bug fixes:
