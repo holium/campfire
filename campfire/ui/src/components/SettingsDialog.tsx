@@ -55,7 +55,7 @@ export const SettingsDialog = () => {
         <div>
           <Text fontSize={6} fontWeight={500}>Extras</Text>
           <Text>Install %pals from <b>~paldev</b> and make some friends for Speed Dial capabilities.</Text>
-          <Text>You can Speed Dial a ship by going directly to {window.location.href + "~sampel-palnet"} to iniate a call with <b>~sampel-palnet</b>.</Text>
+          <Text>You can Speed Dial a ship by going directly to {window.location.href + "~sampel-palnet"} to initiate a call with <b>~sampel-palnet</b>.</Text>
         </div>
       </Flex>
     </div>
