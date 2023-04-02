@@ -4,21 +4,28 @@
 - App link: [~dister-dister-datryn-ribdun/campfire](web+urbitgraph://~dister-dister-datryn-ribdun/campfire)
 - Source repo: [https://github.com/holium/campfire](https://github.com/holium/campfire)
 - Bug reports: [https://github.com/holium/campfire/issues](https://github.com/holium/campfire/issues)
-- Urbit chat: [Holium - Frontier/Campfire](web+urbitgraph://group/~lomder-librun/holium-forerunners/graph/~lomder-librun/campfire-8390)
 
-Campfire is a p2p video chat application made by Holium. It works by establishing a WebRTC connection with Urbit as a signaling channel.
+Campfire is a p2p video chat application made by Holium. It works by establishing a WebRTC connection using Urbit as a signaling channel.
 
 # Install troubleshooting
 
-If you have trouble installing, the most common issue is users also having %urchatfm. Since %campfire is a fork of %urchatfm they have overlapping Gall agents, so you can't have both installed at the same time.
+If you have trouble installing, the most common issue is users also having %urchatfm installed. Since %campfire is a fork of %urchatfm they have overlapping Gall agents, so you can't have both installed at the same time.
 
 ```
 |uninstall %urchatfm
 ```
 
+# Features
+
+- Voice and video calling
+- Screensharing
+- File sharing
+- %pals speed dialing
+- URL speed dialing `/apps/campfire/call/~sampel-palnet` to initiate a call with ~sampel-palnet
+
 # Credits
 
-This work was only possible because of the original [urbit-webrtc](https://github.com/urbit/urbit-webrtc) project that built out the gall agents (`switchboard` now named `rtcswitchboard` and `icepond`) as well as the prototype urchatfm application.
+This work was only possible because of the original [urbit-webrtc](https://github.com/urbit/urbit-webrtc) project that built out the gall agents (`switchboard` now named `rtcswitchboard` and `icepond`) as well as the prototype urchatfm frontend application.
 
 Thank you to:
 - ~ritpub-sipsyl
@@ -31,3 +38,4 @@ Worked on Campfire directly:
 - ~datryn-ribdun
 - ~lomder-librun
 - Holium
+- ~fidwed-sipwyn
