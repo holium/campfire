@@ -36,9 +36,7 @@ export const SettingsDialog = () => {
         }}
       >
         <div className="iceServers">
-          <Text fontSize={6} fontWeight={500}>
-            ICE Servers
-          </Text>
+          <Text fontSize={6} fontWeight={500}>ICE Servers</Text>
           <span>Below are the ICE servers that Campfire is currently configured to use for establshing it's peer-to-peer connections. These servers can be set for your ship, and some may be fetched from your sponsor.</span>
           <br />
           <br />
@@ -55,10 +53,9 @@ export const SettingsDialog = () => {
         </div>
         <br />
         <div>
-          <Text fontSize={6} fontWeight={500} >
-            Extras
-          </Text>
-          <Text>Install %pals from <b>~paldev</b> and make some friends for SpeedDial capabilities.</Text>
+          <Text fontSize={6} fontWeight={500}>Extras</Text>
+          <Text>Install %pals from <b>~paldev</b> and make some friends for Speed Dial capabilities.</Text>
+          <Text>You can Speed Dial a ship by going directly to {window.location.href + "~sampel-palnet"} to iniate a call with <b>~sampel-palnet</b>.</Text>
         </div>
       </Flex>
     </div>

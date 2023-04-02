@@ -268,12 +268,12 @@ export const StartMeetingPage: FC<any> = observer(() => {
       )}
       <Flex flexDirection="row" justifyContent='center' className='absolute left-0 bottom-0 w-full sm:w-auto mb-1 sm:mx-2 sm:my-1.5'>
         <Flex alignItems="flex-start" flexDirection="row" >
-          <Text fontSize={2} fontWeight={500} opacity={0.5}>
+          <Text fontSize={2} fontWeight={500} opacity={0.5} mr={5}>
             v{packageJson.version}
           </Text>
           <a href="/docs/campfire/overview">
             <Text
-              ml={5}
+              mr={5}
               fontSize={2}
               fontWeight={200}
               opacity={0.5}
@@ -285,7 +285,6 @@ export const StartMeetingPage: FC<any> = observer(() => {
           <Dialog>
             <DialogTrigger className="flex justify-center items-center">
               <Text
-                ml={5}
                 fontSize={2}
                 fontWeight={200}
                 opacity={0.5}
