@@ -94,16 +94,19 @@ export const isFileTransferChannel = (label: string) => {
     return label.includes(SHAREFILE_CHANNEL_LABEL) ? true : false;
 }
 
-type TabOption = 'Share' | 'Files';
+enum TabOptions {
+    Share,
+    Files
+}
 
 export const ShareFileDialog = observer(() => {
     const { urchatStore } = useStore();
     const inputRef = useRef<HTMLInputElement>();
     const [files, setFiles] = useState<FileList>();
-    const [tabOpen, setTabOpen] = useState<TabOption>('Share');
+    const [tabOpen, setTabOpen] = useState<TabOptions>(TabOptions.Share);
 
     useEffect(() => {
-        urchatStore.incomingFileTransfer && setTabOpen('Files');
+        urchatStore.incomingFileTransfer && setTabOpen(TabOptions.Files);
     }, []);
 
     const handleShareClick = async () => {
@@ -111,9 +114,7 @@ export const ShareFileDialog = observer(() => {
         if (!files || files.length == 0) return;
 
         for (var i = 0; i < files.length; i++) {
-
             const file = files.item(i);
-
             await urchatStore.startFileTransfer((call) => {
 
                 const channel = call.conn.createDataChannel(SHAREFILE_CHANNEL_LABEL + '-' + urchatStore.ongoingCall.call.peer + '-' + (urchatStore.fileTransfers.length + i));
@@ -252,13 +253,12 @@ export const ShareFileDialog = observer(() => {
 
         }
 
-        setFiles(undefined)
 
-        if (inputRef.current)
+        if (inputRef.current) {
             inputRef.current.value = '';
-
-        setTabOpen('Files')
-
+        }
+        setFiles(undefined);
+        setTabOpen(TabOptions.Files);
     }
 
     return (
@@ -277,21 +277,21 @@ export const ShareFileDialog = observer(() => {
             >
                 <Flex className='w-full sticky py-4 pb-2 z-10 top-0 baseColor' justifyContent='center' alignItems='center'>
                     <Card>
-                        <Button className='whitespace-nowrap' variant={tabOpen == 'Share' ? 'primary' : 'secondary'}
-                            onClick={() => setTabOpen('Share')}
+                        <Button className='whitespace-nowrap' variant={tabOpen == TabOptions.Share ? 'primary' : 'secondary'}
+                            onClick={() => setTabOpen(TabOptions.Share)}
                             style={{ width: '130px' }}
                         >
                             Share Files
                         </Button>
-                        <Button className='whitespace-nowrap' variant={tabOpen == 'Share' ? 'secondary' : 'primary'}
-                            onClick={() => setTabOpen('Files')}
+                        <Button className='whitespace-nowrap' variant={tabOpen == TabOptions.Files ? 'secondary' : 'primary'}
+                            onClick={() => setTabOpen(TabOptions.Files)}
                             style={{ width: '130px' }}
                         >
                             All Files
                         </Button>
                     </Card>
                 </Flex>
-                {tabOpen === 'Share' ?
+                {tabOpen === TabOptions.Share ?
                     <Flex flexDirection='column' className=' w-full h-full' gap={16}>
                         <div style={{ borderRadius: '8px' }} className={` ${!(files === undefined || files.length === 0) && 'default-ring-always'}`}>
                             <Card>
@@ -324,7 +324,7 @@ export const ShareFileDialog = observer(() => {
                                             <Text lineHeight={1} fontWeight='bold'>{files.length + ' files selected'}</Text>
                                         </>
                                     }
-                                    <input ref={inputRef} type="file" className="w-full h-full absolute cursor-pointer opacity-0 top-0 left-0 focus:outline-none" accept="zip,application/octet-stream,application/zip,application/x-zip,application/x-zip-compressed" onChange={(e) => { e.target.files && setFiles(e.target.files) }} multiple />
+                                    <input ref={inputRef} type="file" className="w-full h-full absolute cursor-pointer opacity-0 top-0 left-0 focus:outline-none" onChange={(e) => { e.target.files && setFiles(e.target.files) }} multiple />
                                 </Flex>
                             </Card>
                         </div>
