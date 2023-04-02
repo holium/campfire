@@ -4,7 +4,7 @@ import { deSig } from "@urbit/api/dist";
 import React from "react";
 import { MdOutlineInsertDriveFile } from "react-icons/md";
 import { useStore } from "../stores/root";
-import { FileTransfer } from "../stores/urchat";
+import { FileTransfer, FileTransferStatus } from "../stores/urchat";
 import { downloadFile, formatBytes } from "../util";
 
 export const SharedFile = ({ fileTransfer }) => {
@@ -12,7 +12,7 @@ export const SharedFile = ({ fileTransfer }) => {
 
     const renderByFileStatus = (fileTransfer: FileTransfer) => {
         switch (fileTransfer.status) {
-            case 'Waiting':
+            case FileTransferStatus.Waiting:
                 return (
                     fileTransfer.owner == urchatStore.urbit.ship ?
                         <Flex justifyContent='center' className='w-full '>
@@ -24,26 +24,26 @@ export const SharedFile = ({ fileTransfer }) => {
                             <Button style={{ width: 'calc(50% - 8px)' }} onClick={() => acceptFile(fileTransfer)}>Accept</Button>
                         </Flex>
                 )
-            case 'Ongoing':
+            case FileTransferStatus.Ongoing:
                 return (<>
                     <div style={{ borderRadius: '8px' }} className='border-2 border-gray-300 relative overflow-hidden w-full h-6'>
                         <span className="block h-full absolute pr-2" style={{ backgroundColor: '#F8E390', textAlign: 'end', width: fileTransfer.progress + '%' }}>{fileTransfer.progress + '%'}</span>
                     </div>
                     <Button onClick={() => cancelTransfer(fileTransfer)}>Cancel</Button>
                 </>)
-            case 'Cancelled':
+            case FileTransferStatus.Cancelled:
                 return (
                     <Flex justifyContent='center' className='w-full '>
                         Cancelled
                     </Flex>
                 )
-            case 'Rejected':
+            case FileTransferStatus.Rejected:
                 return (
                     <Flex justifyContent='center' className='w-full '>
                         Rejected
                     </Flex>
                 )
-            case 'Completed':
+            case FileTransferStatus.Completed:
                 return (
                     fileTransfer.owner == urchatStore.urbit.ship ?
                         <Flex justifyContent='center' className='w-full '>
@@ -57,8 +57,7 @@ export const SharedFile = ({ fileTransfer }) => {
 
 
     const acceptFile = (fileTransfer: FileTransfer) => {
-
-        fileTransfer.status = 'Ongoing';
+        fileTransfer.status = FileTransferStatus.Ongoing;
 
         urchatStore.updateFileTransfer(fileTransfer)
 
@@ -68,8 +67,7 @@ export const SharedFile = ({ fileTransfer }) => {
     }
 
     const rejectFile = (fileTransfer: FileTransfer) => {
-
-        fileTransfer.status = 'Rejected';
+        fileTransfer.status = FileTransferStatus.Rejected;
 
         urchatStore.updateFileTransfer(fileTransfer);
 
@@ -79,8 +77,7 @@ export const SharedFile = ({ fileTransfer }) => {
     }
 
     const cancelTransfer = (fileTransfer: FileTransfer) => {
-
-        fileTransfer.status = 'Cancelled';
+        fileTransfer.status = FileTransferStatus.Cancelled
 
         urchatStore.updateFileTransfer(fileTransfer);
 

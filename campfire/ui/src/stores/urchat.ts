@@ -25,7 +25,9 @@ export interface Message {
   message: string;
 }
 
-export type FileTransferStatus = 'Waiting' | 'Ongoing' | 'Rejected' | 'Completed' | 'Errored' | 'Cancelled';
+export enum FileTransferStatus {
+  Waiting, Ongoing, Rejected, Completed, Errored, Cancelled
+}
 
 export interface FileTransfer {
   owner: string;
@@ -35,7 +37,7 @@ export interface FileTransfer {
   fileType: string,
   status: FileTransferStatus,
   channel: RTCDataChannel,
-  url: string;
+  url: string | null;
   progress: number;
 }
 
@@ -326,7 +328,9 @@ export class UrchatStore implements IUrchatStore {
 
   clearFileTransfers() {
     this.fileTransfers.forEach(x => {
-      window.URL.revokeObjectURL(x.url)
+      if(x.url){
+        window.URL.revokeObjectURL(x.url)
+      }
     })
 
     this.fileTransfers = [];
