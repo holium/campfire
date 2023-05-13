@@ -1,22 +1,22 @@
 env:
-  desk: 'base'
+  desk: 'garden'
   urbit_path: '~/dev/urbit/urbit'
   repo_path: '~/dev/urbit/holium/campfire/'
   ui_path: '~/dev/urbit/holium/campfire/campfire/ui/'
   ship_path: '~/dev/urbit/ships'
 script:
   - mount:
-    - cmd: 'mount %base'
+    - cmd: 'mount %garden'
       type: 'urbit:app'
   - buildandcopyui:
     - cmd: '~/dev/urbit/holium/campfire/campfire/helpers/build-ui.sh'
       type: 'system'
-  - addwavtobase:
-    - cmd: 'cp ~/dev/urbit/holium/campfire/campfire/helpers/wav.hoon ~/dev/urbit/ships/zod/base/mar/'
+  - addwavtogarden:
+    - cmd: 'cp ~/dev/urbit/holium/campfire/campfire/helpers/wav.hoon ~/dev/urbit/ships/zod/garden/mar/'
       type: 'system'
   - commit:
-    - cmd: 'commit %base'
+    - cmd: 'commit %garden'
       type: 'urbit:app'
   - glob:
-    - cmd: '-garden!make-glob %base /ui'
+    - cmd: '-garden!make-glob %garden /ui'
       type: 'urbit:dojo'
